@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analog Clock</title>
+<style>
+  body {
+    background-color: #222; /* Dark background for the entire page */
+    color: #fff; /* White text color */
+    font-family: Arial, sans-serif; /* Font style */
+  }
+
+  .clock {
+    width: 200px;
+    height: 200px;
+    border: 5px solid #fff; /* White border, reduced thickness */
+    border-radius: 50%;
+    position: relative;
+    margin: 20px auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: black; /* Black background color */
+  }
+
+  .clock .hand {
+    position: absolute;
+    transform-origin: center bottom;
+    border-radius: 2px; /* Adjusted for sharper ends */
+  }
+
+  .hour {
+    height: 50px;
+    width: 8px;
+    top: calc(50% - 50px);
+    left: calc(50% - 4px);
+    background-color: #0066CC; /* Blue color for hour hand */
+  }
+
+  .minute {
+    height: 80px; /* Increased height */
+    width: 4px; /* Decreased width to be slightly smaller */
+    top: calc(50% - 80px); /* Adjusted top position */
+    left: calc(50% - 2px); /* Adjusted left position */
+    background-color: #c0392b; /* Red color for minute hand */
+  }
+
+  .second {
+    height: 90px;
+    width: 6px;
+    top: calc(50% - 90px);
+    left: calc(50% - 3px);
+    background-color: #f39c12; /* Orange color for second hand */
+  }
+
+  .center {
+    width: 10px;
+    height: 10px;
+    background: #333;
+    position: absolute;
+    top: calc(50% - 5px);
+    left: calc(50% - 5px);
+    border-radius: 50%;
+  }
+
+  .date-container {
+    position: absolute;
+    top: 12%; /* Adjusted to be slightly lower */
+    right: 23%; /* Adjusted to be between 12 and 3 o'clock */
+    width: 40px; /* Decreased width of the container */
+    height: 40px; /* Decreased height of the container */
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: #3498db; /* Blue color for date circle */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow effect */
+  }
+
+  .date-text {
+    font-size: 10px; /* Adjusted font size */
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+  }
+
+  .number {
+    position: absolute;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff; /* White color for numbers */
+  }
+
+  .number.top {
+    top: 5px; /* Adjusted top position */
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .number.bottom {
+    bottom: 5px; /* Adjusted bottom position */
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .number.left {
+    top: 50%;
+    left: 5px; /* Adjusted left position */
+    transform: translateY(-50%);
+  }
+
+  .number.right {
+    top: 50%;
+    right: 5px; /* Adjusted right position */
+    transform: translateY(-50%);
+  }
+</style>
+</head>
+<body>
+
+<div class="clock">
+  <div class="number top">12</div>
+  <div class="number bottom">6</div>
+  <div class="number left">9</div>
+  <div class="number right">3</div>
+  
+  <div class="hand hour" id="hour"></div>
+  <div class="hand minute" id="minute"></div>
+  <div class="hand second" id="second"></div>
+  
+  <div class="center"></div>
+  
+  <div class="date-container" id="dateContainer">
+    <div class="date-text" id="dateText"></div>
+  </div>
+</div>
+
+<script>
+  function updateClock() {
+    const now = new Date();
+    const hour = now.getHours() % 12; // Convert to 12-hour format
+    const minute = now.getMinutes();
+    const second = now.getSeconds();
+    const dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][now.getDay()];
+    const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][now.getMonth()];
+    const dayOfMonth = now.getDate();
+
+    const hourHand = document.getElementById('hour');
+    const minuteHand = document.getElementById('minute');
+    const secondHand = document.getElementById('second');
+    
+    const hourDeg = (hour * 30) + (0.5 * minute); // 30 degrees per hour, 0.5 degrees per minute
+    const minuteDeg = (minute * 6) + (0.1 * second); // 6 degrees per minute, 0.1 degrees per second
+    const secondDeg = second * 6; // 6 degrees per second
+    
+    hourHand.style.transform = `rotate(${hourDeg}deg)`;
+    minuteHand.style.transform = `rotate(${minuteDeg}deg)`;
+    secondHand.style.transform = `rotate(${secondDeg}deg)`;
+    
+    const dateText = `${month} ${dayOfMonth}<br>${dayOfWeek}`; // Format the date text
+    document.getElementById('dateText').innerHTML = dateText; // Set HTML content to display line break
+  }
+  
+  // Update clock every second
+  setInterval(updateClock, 1000);
+  
+  // Initial call to set initial position
+  updateClock();
+</script>
+
+</body>
+</html>
